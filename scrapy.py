@@ -63,14 +63,14 @@ def main():
                     URL.append(current)
 
             p_tags = get_p_tags(soup)
-            concatenated_p_tags = ",".join(p_tags)
-            print(f"Paragraph Tags: {concatenated_p_tags}")
+            strip_p_tags = ",".join(p_tags)
+            print(f"Paragraph Tags: {strip_p_tags}")
 
             image_urls = get_image_urls(soup, url_to_visit)
             print(f"Image URLs: {image_urls}")
 
-            unix_ts = int(datetime.now().timestamp())
-            file_to_save = f"liveMint_{unix_ts}.html"
+            text = int(datetime.now().timestamp())
+            file_to_save = f"azquotes{text}.html"
             with open(file_to_save, "w") as html_file:
                 html_file.write(response.text)
 
@@ -86,7 +86,7 @@ def main():
                     "url": url_to_visit,
                     "timestamp": datetime.now().isoformat(),
                     "title": page_title,
-                    "p_tags": concatenated_p_tags,
+                    "p_tags": strip_p_tags,
                     "image_urls": image_urls,
                 }
             )
@@ -94,13 +94,13 @@ def main():
             file_count += 1
 
             if file_count % batch_size == 0:
-                json_file_to_save = f"liveMint_data_{file_count // batch_size}.json"
+                json_file_to_save = f"azquotes{file_count // batch_size}.json"
                 with open(json_file_to_save, "w") as json_file:
                     json.dump(all_data, json_file, indent=4)
                 all_data.clear()
 
     if all_data:
-        json_file_to_save = f"liveMint_data_batch_{(file_count // batch_size) + 1}.json"
+        json_file_to_save = f"azquotes{(file_count // batch_size) + 1}.json"
         with open(json_file_to_save, "w") as json_file:
             json.dump(all_data, json_file, indent=4)
 
